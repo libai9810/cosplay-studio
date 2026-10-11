@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg">
+<title>COSPLAY STUDIO · 视觉作品集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/showcase.css">
+<link rel="stylesheet" href="css/editor.css">
+<link rel="stylesheet" href="css/gallery.css">
+<link rel="stylesheet" href="css/planner.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- ===================== Background Layer ===================== -->
+<div id="bg-layer"></div>
+<div id="bg-overlay"></div>
+
+<!-- ===================== Top Navigation ===================== -->
+<nav id="top-nav">
+  <div class="nav-logo">
+    <span class="logo-icon">◆</span>
+    <span class="logo-text">COSPLAY STUDIO</span>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="nav-link active" data-page="showcase">SHOWCASE</a>
+    <a href="#" class="nav-link owner-only" data-page="editor">EDITOR</a>
+    <a href="#" class="nav-link" data-page="gallery">GALLERY</a>
+    <a href="#" class="nav-link" data-page="contact">CONTACT</a>
+    <a href="#" class="nav-link owner-only" data-page="planner">PLANNER</a>
+  </div>
+  <div class="nav-right">
+    <button id="bg-toggle-btn" class="nav-btn owner-only" title="Background Settings">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <span>BG</span>
+    </button>
+    <button id="music-toggle-btn" class="nav-btn" title="Background Music">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      <span>MUSIC</span>
+    </button>
+    <button id="auth-btn" class="nav-btn" title="Login">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span id="auth-label">LOGIN</span>
+    </button>
+    <button id="mobile-menu-btn" class="nav-btn mobile-only" title="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== Background Settings Panel ===================== -->
+<div id="bg-panel" class="dropdown-panel">
+  <div class="panel-header">BACKGROUND SETTINGS</div>
+  <div class="panel-body">
+    <label class="panel-label">Choose Background Image</label>
+    <input type="file" id="bg-file-input" accept="image/*" class="hidden-input owner-only">
+    <button class="panel-btn owner-only" id="bg-upload-btn">UPLOAD IMAGE</button>
+    <div class="panel-row">
+      <label class="panel-label-sm">Opacity</label>
+      <input type="range" id="bg-opacity" min="5" max="100" value="20" class="panel-slider">
+      <span id="bg-opacity-val" class="panel-val">20%</span>
+    </div>
+    <div class="panel-row">
+      <label class="panel-label-sm">Blur</label>
+      <input type="range" id="bg-blur" min="0" max="30" value="8" class="panel-slider">
+      <span id="bg-blur-val" class="panel-val">8px</span>
+    </div>
+    <button class="panel-btn panel-btn-danger owner-only" id="bg-clear-btn">CLEAR BACKGROUND</button>
+  </div>
+</div>
+
+<!-- ===================== Music Panel ===================== -->
+<div id="music-panel" class="dropdown-panel">
+  <div class="panel-header">BACKGROUND MUSIC</div>
+  <div class="panel-body">
+    <label class="panel-label">Upload Music Files</label>
+    <input type="file" id="music-file-input" accept="audio/*" multiple class="hidden-input owner-only">
+    <button class="panel-btn owner-only" id="music-upload-btn">UPLOAD MUSIC</button>
+    <div id="music-list" class="music-list"></div>
+    <div class="panel-row">
+      <label class="panel-label-sm">Volume</label>
+      <input type="range" id="music-volume" min="0" max="100" value="50" class="panel-slider">
+      <span id="music-volume-val" class="panel-val">50%</span>
+    </div>
+    <button class="panel-btn panel-btn-danger owner-only" id="music-clear-btn">CLEAR ALL</button>
+  </div>
+</div>
+
+<audio id="bgm-audio"></audio>
+
+<!-- ===================== Page: Showcase ===================== -->
+<section id="page-showcase" class="page active">
+  <div class="showcase-hero">
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carousel-track"></div>
+      <button class="carousel-arrow carousel-prev" id="carousel-prev">&#10094;</button>
+      <button class="carousel-arrow carousel-next" id="carousel-next">&#10095;</button>
+      <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
+    <div class="showcase-sidebar">
+      <h1 class="hero-title">COSPLAY<br><span class="hero-accent">STUDIO</span></h1>
+      <p class="hero-sub">Where every character comes alive.<br>Showcase your finest work.</p>
+      <input type="file" id="showcase-upload" accept="image/*" multiple class="hidden-input owner-only">
+      <button class="hero-cta owner-only" id="showcase-upload-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        UPLOAD PHOTOS
+      </button>
+      <button class="hero-cta hero-cta-subtle owner-only" id="showcase-reorder-btn" style="display:none;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15h18M3 9h18"/><path d="M9 6l-3 3 3 3"/><path d="M15 18l3-3-3-3"/></svg>
+        REORDER
+      </button>
+      <div class="showcase-count"><span id="showcase-photo-count">0</span> photos in showcase</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Page: Editor ===================== -->
+<!-- Showcase Reorder Modal -->
+<div class="modal-overlay" id="showcase-reorder-modal" style="display:none;">
+  <div class="modal-box" style="max-width:720px;">
+    <div class="modal-header">
+      <h3>REORDER SHOWCASE</h3>
+      <button class="modal-close" id="showcase-reorder-close">&times;</button>
+    </div>
+    <p style="font-size:12px;color:var(--c-text-3);margin-bottom:16px;">Drag and drop to rearrange the display order.</p>
+    <div class="reorder-grid" id="reorder-grid"></div>
+    <div class="modal-footer">
+      <button class="panel-btn" id="reorder-cancel-btn">CANCEL</button>
+      <button class="panel-btn panel-btn-primary" id="reorder-save-btn">SAVE ORDER</button>
+    </div>
+  </div>
+</div>
+
+<section id="page-editor" class="page">
+  <div class="editor-layout">
+    <!-- Editor Toolbar -->
+    <div class="editor-toolbar">
+      <input type="file" id="editor-upload" accept="image/*" class="hidden-input owner-only">
+      <button class="tool-btn owner-only" id="editor-open-btn" title="Open Image">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>OPEN</span>
+      </button>
+      <div class="tool-divider"></div>
+      <button class="tool-btn" data-tool="adjust" title="Adjust">ADJUST</button>
+      <button class="tool-btn" data-tool="filters" title="Filters">FILTERS</button>
+      <button class="tool-btn" data-tool="cutout" title="Background Removal">CUTOUT</button>
+      <button class="tool-btn" data-tool="stickers" title="Stickers">STICKERS</button>
+      <button class="tool-btn" data-tool="draw" title="Draw">DRAW</button>
+      <button class="tool-btn" data-tool="crop" title="Crop & Resize">CROP</button>
+      <div class="tool-divider"></div>
+      <button class="tool-btn" id="undo-btn" title="Undo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6.7 3L3 13"/></svg>
+      </button>
+      <button class="tool-btn" id="redo-btn" title="Redo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016.7 3L21 13"/></svg>
+      </button>
+      <div class="tool-divider"></div>
+      <button class="tool-btn" id="reset-btn" title="Reset">RESET</button>
+      <button class="tool-btn tool-btn-primary owner-only" id="download-btn" title="Download">DOWNLOAD</button>
+    </div>
+
+    <!-- Canvas Area -->
+    <div class="editor-canvas-area" id="editor-canvas-area">
+      <canvas id="editor-canvas"></canvas>
+      <div class="editor-empty" id="editor-empty">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <p>UPLOAD A PHOTO TO START EDITING</p>
+        <button class="hero-cta owner-only" id="editor-empty-btn">CHOOSE IMAGE</button>
+      </div>
+    </div>
+
+    <!-- Right Panel for tool options -->
+    <div class="editor-panel" id="editor-panel">
+      <div class="panel-header">TOOLS</div>
+      <div class="panel-body" id="editor-panel-content">
+        <p class="panel-hint">Select a tool from the toolbar above.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download Modal -->
+  <div class="modal-overlay" id="download-modal">
+    <div class="modal-box">
+      <div class="modal-header">EXPORT IMAGE</div>
+      <div class="modal-body">
+        <div class="modal-row">
+          <label>Format</label>
+          <select id="dl-format">
+            <option value="png">PNG (Lossless)</option>
+            <option value="jpeg">JPEG (Compressed)</option>
+            <option value="webp">WebP (Optimized)</option>
+          </select>
+        </div>
+        <div class="modal-row">
+          <label>Quality</label>
+          <select id="dl-quality">
+            <option value="0.5">Standard (50%)</option>
+            <option value="0.8" selected>High (80%)</option>
+            <option value="1">Maximum (100%)</option>
+          </select>
+        </div>
+        <div class="modal-row">
+          <label>Scale</label>
+          <select id="dl-scale">
+            <option value="0.5">Small (0.5x)</option>
+            <option value="1" selected>Original (1x)</option>
+            <option value="2">2x Upscale</option>
+            <option value="3">3x Upscale</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="panel-btn" id="dl-cancel">CANCEL</button>
+        <button class="panel-btn panel-btn-primary owner-only" id="dl-confirm">DOWNLOAD</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Page: Gallery ===================== -->
+<section id="page-gallery" class="page">
+  <div class="gallery-layout">
+    <div class="gallery-sidebar">
+      <div class="gallery-sidebar-header">
+        <span>CATEGORIES</span>
+        <button class="icon-btn owner-only" id="add-category-btn" title="Add Category">+</button>
+      </div>
+      <div class="gallery-tabs" id="gallery-tabs">
+        <!-- Bookmark tabs rendered dynamically -->
+      </div>
+    </div>
+    <div class="gallery-main">
+      <div class="gallery-header">
+        <h2 id="gallery-title">ALL PHOTOS</h2>
+        <div class="gallery-actions">
+          <input type="file" id="gallery-upload" accept="image/*" multiple class="hidden-input owner-only">
+          <button class="hero-cta small owner-only" id="gallery-upload-btn">UPLOAD PHOTOS</button>
+          <button class="panel-btn panel-btn-danger small owner-only" id="gallery-delete-cat-btn" style="display:none;">DELETE CATEGORY</button>
+          <button class="gallery-music-icon" id="gallery-music-icon" title="Category Music" style="display:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- Gallery Category Music Panel (floating, toggled by music icon) -->
+      <div class="gallery-music-bar" id="gallery-music-bar">
+        <div class="gallery-music-main">
+          <button class="gallery-music-play" id="gallery-music-play" title="Play / Pause">
+            <svg class="gm-icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="gm-icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+          </button>
+          <div class="gallery-music-info">
+            <span id="gallery-music-track-name">No music uploaded</span>
+            <span id="gallery-music-track-pos"></span>
+          </div>
+          <div class="gallery-music-vol">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+            <input type="range" id="gallery-music-volume" min="0" max="100" value="50" class="panel-slider">
+          </div>
+          <button class="gallery-music-list-toggle" id="gallery-music-toggle" title="Toggle playlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h13M3 12h13M3 18h13M20 6v12"/></svg>
+            <span id="gallery-music-count">0</span>
+          </button>
+        </div>
+        <div class="gallery-music-list-wrap" id="gallery-music-list-wrap" style="display:none;">
+          <div id="gallery-music-list" class="gallery-music-list-inner"></div>
+          <div class="gallery-music-actions">
+            <input type="file" id="gallery-music-input" accept="audio/*" multiple class="hidden-input owner-only">
+            <button class="panel-btn small owner-only" id="gallery-music-upload">UPLOAD MUSIC</button>
+            <button class="panel-btn panel-btn-danger small owner-only" id="gallery-music-clear">CLEAR ALL</button>
+          </div>
+        </div>
+      </div>
+      <audio id="gallery-bgm-audio"></audio>
+      <div class="masonry-grid" id="masonry-grid">
+        <div class="gallery-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>NO PHOTOS YET</p>
+          <p class="hint-text">Create a category and upload your cosplay photos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&lsaquo;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&rsaquo;</button>
+    <div class="lightbox-info" id="lightbox-info"></div>
+  </div>
+</section>
+
+<!-- ===================== Page: Stories ===================== -->
+
+
+<!-- ===================== Auth Modal ===================== -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal-box" style="width:380px;">
+    <div class="modal-header">OWNER LOGIN</div>
+    <div class="modal-body" style="padding:24px;">
+      <p style="color:var(--c-text-3);font-size:12px;margin-bottom:16px;text-align:center;">Enter your credentials to access editing features.</p>
+      <input type="text" id="auth-username" placeholder="Username" style="text-align:center;font-size:15px;margin-bottom:10px;">
+      <input type="password" id="auth-password" placeholder="Password" style="text-align:center;font-size:16px;letter-spacing:4px;">
+      <p id="auth-error" style="color:var(--c-danger);font-size:12px;text-align:center;margin-top:8px;display:none;">Incorrect username or password</p>
+    </div>
+    <div class="modal-footer">
+      <button class="panel-btn" id="auth-cancel">CANCEL</button>
+      <button class="panel-btn panel-btn-primary" id="auth-login">LOGIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Generic Confirm Modal ===================== -->
+<div class="modal-overlay" id="app-confirm-modal" style="display:none;">
+  <div class="modal-box" style="width:380px;">
+    <div class="modal-body" style="padding:28px 24px;text-align:center;">
+      <p id="app-confirm-message" style="font-size:14px;color:var(--c-text);line-height:1.6;margin:0;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="panel-btn" id="app-confirm-cancel">CANCEL</button>
+      <button class="panel-btn panel-btn-primary" id="app-confirm-ok">CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Mobile Nav Drawer ===================== -->
+<div id="mobile-drawer" class="mobile-drawer"></div>
+<div id="mobile-drawer-overlay" class="mobile-drawer-overlay"></div>
+
+<!-- ===================== Page: Planner ===================== -->
+<section id="page-planner" class="page">
+  <div class="planner-layout">
+    <!-- Left sidebar: year/month scale -->
+    <div class="planner-sidebar">
+      <div class="planner-sidebar-header">TIMELINE</div>
+      <div class="planner-timeline" id="planner-timeline">
+        <!-- Year/month items rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Main calendar area -->
+    <div class="planner-main">
+      <div class="planner-header">
+        <div class="planner-nav">
+          <button class="icon-btn" id="prev-month">&lsaquo;</button>
+          <h2 id="planner-month-label">JULY 2026</h2>
+          <button class="icon-btn" id="next-month">&rsaquo;</button>
+        </div>
+        <div class="planner-stats">
+          <div class="stat-box">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-label">TOTAL PLANS</span>
+          </div>
+          <div class="stat-box stat-done">
+            <span class="stat-num" id="stat-done">0</span>
+            <span class="stat-label">COMPLETED</span>
+          </div>
+          <div class="stat-box stat-pending">
+            <span class="stat-num" id="stat-pending">0</span>
+            <span class="stat-label">PENDING</span>
+          </div>
+          <div class="stat-box stat-cost">
+            <span class="stat-num" id="stat-cost">¥0</span>
+            <span class="stat-label">TOTAL COST</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-weekdays">
+        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+      </div>
+      <div class="calendar-grid" id="calendar-grid">
+        <!-- Calendar days rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Right: plan detail -->
+    <div class="planner-detail" id="planner-detail">
+      <div class="planner-detail-empty" id="planner-detail-empty">
+        <p>SELECT A DATE TO VIEW OR CREATE A PLAN</p>
+      </div>
+      <div class="planner-detail-content" id="planner-detail-content" style="display:none;">
+        <!-- Plan content rendered dynamically -->
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== Page: Contact ===================== -->
+<section id="page-contact" class="page">
+  <div class="contact-wrap">
+    <h1 class="contact-title">CONTACT <span class="hero-accent">/ 约拍合作</span></h1>
+    <p class="contact-sub">商业约拍 · 后期合成 · 作品授权，欢迎联系</p>
+    <div class="contact-grid">
+      <a class="contact-card" href="https://qm.qq.com/q/2302433751" target="_blank" rel="noopener">
+        <div class="contact-card-label">QQ</div>
+        <div class="contact-card-value">2302433751</div>
+        <div class="contact-card-hint">点击添加好友</div>
+      </a>
+      <div class="contact-card contact-card-static">
+        <div class="contact-card-label">QQ 号</div>
+        <div class="contact-card-value" id="contact-qq-copy">2302433751</div>
+        <div class="contact-card-hint" id="contact-copy-hint">点击复制</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Toast ===================== -->
+<div id="toast" class="toast"></div>
+
+<!-- ===================== Scripts ===================== -->
+<script src="js/cloud-db.js"></script>
+<script src="js/app.js"></script>
+<script src="js/showcase.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
